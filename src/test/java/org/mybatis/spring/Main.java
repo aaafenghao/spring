@@ -31,10 +31,14 @@ public class Main {
     //org.apache.ibatis.binding.MapperProxy@2118cddf
 
     //1、Spring上下文的初始化
-
+    //首先注册MapperScannerConfigurer的bd,然后扫描Mapper接口信息,添加对应的bd到Spring中,将BeanClass设置成MapperFactoryBean
+    //设置一些需要的属性值
+    //在MapperFactoryBean对象初始化的时候,会调用InitializingBean接口的afterPropertiesSet方法,完后接口对应xml的解析,然后将
+    //方法封装起来
     //2、从Spring容器中获取Mapper接口对应的Bean
-
+    //获取对象是调用MapperFactoryBean对象的getObject方法,返回一个代理类,对应的InvocationHandler为MapperProxy
     //3、进行方法的调用
+    //调用对应的InvocationHandler方法中的invoke方法
 
 
   }
