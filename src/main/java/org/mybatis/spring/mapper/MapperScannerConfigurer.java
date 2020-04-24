@@ -331,10 +331,13 @@ public class MapperScannerConfigurer
    * {@inheritDoc}
    *
    * @since 1.0.2
+   *
+   * 后置处理器方法调用
    */
   @Override
   public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
     if (this.processPropertyPlaceHolders) {
+      //就目前来看,这个方法调用没啥用
       processPropertyPlaceHolders();
     }
 
@@ -353,6 +356,7 @@ public class MapperScannerConfigurer
       scanner.setLazyInitialization(Boolean.valueOf(lazyInitialization));
     }
     scanner.registerFilters();
+    //后续调用该类的doscan方法
     scanner.scan(
         StringUtils.tokenizeToStringArray(this.basePackage, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
   }

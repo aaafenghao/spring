@@ -48,6 +48,8 @@ import org.springframework.util.StringUtils;
  * @see MapperFactoryBean
  * @see ClassPathMapperScanner
  * @since 1.2.0
+ * 关键接口ImportBeanDefinitionRegistrar
+ * 提供注册BeanDefinition方法
  */
 public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
 
@@ -71,13 +73,26 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
         .fromMap(importingClassMetadata.getAnnotationAttributes(MapperScan.class.getName()));
     if (mapperScanAttrs != null) {
       registerBeanDefinitions(importingClassMetadata, mapperScanAttrs, registry,
+          //生成基础的BeanName
           generateBaseBeanName(importingClassMetadata, 0));
     }
   }
 
+  /**
+   * 基于MapperScannerConfigurer注册BeanDefition信息
+   *
+   * 注册的应该是配置类的BeanDefition,配置类实现了BeanDefinitionRegistryPostProcessor后置处理器,
+   * 之后会执行postProcessBeanDefinitionRegistry方法
+   *
+   * @param annoMeta
+   * @param annoAttrs
+   * @param registry
+   * @param beanName
+   */
   void registerBeanDefinitions(AnnotationMetadata annoMeta, AnnotationAttributes annoAttrs,
       BeanDefinitionRegistry registry, String beanName) {
-
+    //MapperScannerConfigurer实现了BeanDefinitionRegistryPostProcessor,内部重写了接口的BeanDefinition注册的后置处理器接口
+    //接口中包含ClassPathMapperScanner对Mapper文件的扫描添加mapper对应到Spring容器中的类,MapperFactoryBean
     BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(MapperScannerConfigurer.class);
     builder.addPropertyValue("processPropertyPlaceHolders", true);
 
@@ -131,13 +146,13 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
     }
 
     builder.addPropertyValue("basePackage", StringUtils.collectionToCommaDelimitedString(basePackages));
-
+    //注册BeanDefinition
     registry.registerBeanDefinition(beanName, builder.getBeanDefinition());
 
   }
 
   private static String generateBaseBeanName(AnnotationMetadata importingClassMetadata, int index) {
-    return importingClassMetadata.getClassName() + "#" + MapperScannerRegistrar.class.getSimpleName() + "#" + index;
+     return importingClassMetadata.getClassName() + "#" + MapperScannerRegistrar.class.getSimpleName() + "#" + index;
   }
 
   private static String getDefaultBasePackage(AnnotationMetadata importingClassMetadata) {

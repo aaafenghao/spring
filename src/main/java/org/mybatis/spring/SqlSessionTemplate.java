@@ -127,6 +127,7 @@ public class SqlSessionTemplate implements SqlSession, DisposableBean {
     this.sqlSessionFactory = sqlSessionFactory;
     this.executorType = executorType;
     this.exceptionTranslator = exceptionTranslator;
+    //创建sqlSessionProxy代理对象
     this.sqlSessionProxy = (SqlSession) newProxyInstance(SqlSessionFactory.class.getClassLoader(),
         new Class[] { SqlSession.class }, new SqlSessionInterceptor());
   }
@@ -444,6 +445,7 @@ public class SqlSessionTemplate implements SqlSession, DisposableBean {
         }
         throw unwrapped;
       } finally {
+        //一级缓存失效的原因--一级缓存是基于session的
         if (sqlSession != null) {
           closeSqlSession(sqlSession, SqlSessionTemplate.this.sqlSessionFactory);
         }

@@ -124,11 +124,30 @@
     </dependency>
 
     <!-- Compile dependencies -->
+<!--    <dependency>-->
+<!--      <groupId>org.mybatis</groupId>-->
+<!--      <artifactId>mybatis</artifactId>-->
+<!--      <version>${mybatis.version}</version>-->
+<!--      <scope>provided</scope>-->
+<!--    </dependency>-->
+
     <dependency>
       <groupId>org.mybatis</groupId>
       <artifactId>mybatis</artifactId>
-      <version>${mybatis.version}</version>
-      <scope>provided</scope>
+      <version>3.5.5-SNAPSHOT</version>
+    </dependency>
+    <!--解决Mybatis启动报如下错误-->
+    <!--Cannot enable lazy loading because Javassist is not available. Add Javassist to your classpath-->
+    <dependency>
+      <groupId>org.javassist</groupId>
+      <artifactId>javassist</artifactId>
+      <version>3.27.0-GA</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ognl</groupId>
+      <artifactId>ognl</artifactId>
+      <version>3.2.14</version>
     </dependency>
 
     <dependency>

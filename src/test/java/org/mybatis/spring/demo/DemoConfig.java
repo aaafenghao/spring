@@ -12,6 +12,10 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
+/**
+ * @MapperScan注解中
+ * factoryBean属性的默认值MapperFactoryBean
+ */
 
 @Configuration
 @MapperScan("org.mybatis.spring.demo.mapper")
@@ -21,10 +25,15 @@ public class DemoConfig {
 
   @Bean
   public SqlSessionFactoryBean getSqlSessionFactoryBean(@Autowired DataSource dataSource) throws Exception{
+
     SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
     bean.setDataSource(dataSource);
     Resource[] resources = resourceResolver.getResources("mapper/*.xml");
     bean.setMapperLocations(resources);
+
+//    org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+//    configuration.setLogImpl();
+//    bean.setConfiguration(configuration);
     return bean;
   }
 
